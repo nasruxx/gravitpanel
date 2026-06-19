@@ -957,9 +957,9 @@ async function dockerAction(type, id, action) {
   try {
     if (action === 'delete') {
       if (!confirm('Are you sure?')) return;
-      await api(`/${type}/${id}`, { method: 'DELETE' });
+      await api(`/docker/${type}/${id}`, { method: 'DELETE' });
     } else {
-      await api(`/${type}/${id}/${action}`, { method: 'POST' });
+      await api(`/docker/${type}/${id}/${action}`, { method: 'POST' });
     }
     showToast('Action completed', 'success');
     const activeTab = document.querySelector('.tab.active');
