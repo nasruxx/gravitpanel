@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Database
+database/gravitpanel.db
+database/gravitpanel.db-wal
+database/gravitpanel.db-shm
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Temp files
+tmp/
+tmp/**
+
+# Backups
+backups/
+backups/**
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build
+dist/
+build/

@@ -1,0 +1,50 @@
+module.exports = {
+  port: parseInt(process.env.PANEL_PORT || '8321'),
+  jwtSecret: process.env.JWT_SECRET || 'gravitpanel_secret_key_change_this',
+  jwtExpiry: '24h',
+  dbPath: __dirname + '/../database/gravitpanel.db',
+  panelName: 'GravitPanel',
+  panelVersion: '1.0.0',
+  defaultSSH: { port: 22 },
+  paths: {
+    nginx: '/etc/nginx',
+    sites: '/etc/nginx/sites-available',
+    sitesEnabled: '/etc/nginx/sites-enabled',
+    apache: '/etc/apache2',
+    php: '/etc/php',
+    mysql: '/etc/mysql',
+    apacheConf: '/etc/apache2/apache2.conf',
+    logs: {
+      nginxAccess: '/var/log/nginx/access.log',
+      nginxError: '/var/log/nginx/error.log',
+      apacheAccess: '/var/log/apache2/access.log',
+      apacheError: '/var/log/apache2/error.log',
+      auth: '/var/log/auth.log',
+      syslog: '/var/log/syslog'
+    },
+    webRoot: '/var/www',
+    backups: __dirname + '/../backups',
+    temp: '/tmp/gravitpanel'
+  },
+  appStore: [
+    { id: 'nginx', name: 'Nginx', category: 'Web Server', icon: 'server', installed: false },
+    { id: 'apache', name: 'Apache', category: 'Web Server', icon: 'server', installed: false },
+    { id: 'mysql', name: 'MySQL', category: 'Database', icon: 'database', installed: false },
+    { id: 'mariadb', name: 'MariaDB', category: 'Database', icon: 'database', installed: false },
+    { id: 'postgres', name: 'PostgreSQL', category: 'Database', icon: 'database', installed: false },
+    { id: 'redis', name: 'Redis', category: 'Database', icon: 'hard-drive', installed: false },
+    { id: 'mongodb', name: 'MongoDB', category: 'Database', icon: 'database', installed: false },
+    { id: 'phpmyadmin', name: 'phpMyAdmin', category: 'Tools', icon: 'layout', installed: false },
+    { id: 'php', name: 'PHP', category: 'Runtime', icon: 'code', installed: false },
+    { id: 'nodejs', name: 'Node.js', category: 'Runtime', icon: 'code', installed: false },
+    { id: 'python', name: 'Python', category: 'Runtime', icon: 'code', installed: false },
+    { id: 'docker', name: 'Docker', category: 'Container', icon: 'box', installed: false },
+    { id: 'vscode', name: 'code-server', category: 'Tools', icon: 'terminal', installed: false },
+    { id: 'fail2ban', name: 'Fail2Ban', category: 'Security', icon: 'shield', installed: false },
+    { id: 'certbot', name: 'Certbot (SSL)', category: 'Security', icon: 'lock', installed: false },
+    { id: 'ftp', name: 'Pure-FTPd', category: 'FTP', icon: 'folder', installed: false },
+    { id: 'proftpd', name: 'ProFTPD', category: 'FTP', icon: 'folder', installed: false },
+    { id: 'wordpress', name: 'WordPress', category: 'CMS', icon: 'globe', installed: false },
+    { id: 'dockercompose', name: 'Docker Compose', category: 'Container', icon: 'box', installed: false }
+  ]
+};

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GravitPanel - Login</title>
+  <meta name="description" content="GravitPanel VPS Server Control Panel - Login">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/animations.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%233b82f6'/><text x='16' y='22' font-size='18' font-weight='bold' fill='white' text-anchor='middle'>G</text></svg>">
+  <style>
+    .login-particles {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(59, 130, 246, 0.3);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+    .particle:nth-child(2n) { background: rgba(6, 182, 212, 0.2); animation-duration: 8s; animation-delay: 1s; }
+    .particle:nth-child(3n) { background: rgba(139, 92, 246, 0.2); animation-duration: 7s; animation-delay: 2s; }
+    .particle:nth-child(4n) { background: rgba(59, 130, 246, 0.15); animation-duration: 9s; }
+    .login-card { animation: fadeInUp 0.6s ease; }
+    .form-group { animation: fadeInUp 0.6s ease forwards; opacity: 0; }
+    .form-group:nth-child(2) { animation-delay: 0.1s; }
+    .form-group:nth-child(3) { animation-delay: 0.2s; }
+    .form-group:nth-child(4) { animation-delay: 0.3s; }
+    .setup-note { 
+      background: rgba(59, 130, 246, 0.1); 
+      border: 1px solid rgba(59, 130, 246, 0.2); 
+      border-radius: var(--radius-md);
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      font-size: var(--text-sm);
+      color: var(--text-accent);
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated particles background -->
+  <div class="login-particles" id="particles"></div>
+
+  <div class="login-page">
+    <div class="login-container">
+      <div class="login-card">
+        <div class="login-logo">
+          <div style="width:64px;height:64px;margin:0 auto 1rem;background:var(--gradient-primary);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(59,130,246,0.3);">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+            </svg>
+          </div>
+          <h1>GravitPanel</h1>
+          <p>Free VPS Server Control Panel</p>
+        </div>
+
+        <div class="setup-note" id="setupNote">
+          <svg style="width:16px;height:16px;display:inline;vertical-align:middle;margin-right:4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          First time setup — create your admin account below.
+        </div>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-input" id="username" placeholder="Enter username" required autocomplete="username">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <div style="position:relative;">
+              <input type="password" class="form-input" id="password" placeholder="Enter password" required autocomplete="current-password">
+              <button type="button" id="togglePassword" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;padding:4px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              </button>
+            </div>
+          </div>
+          <div class="form-group" id="confirmGroup" style="display:none;">
+            <label class="form-label">Confirm Password</label>
+            <input type="password" class="form-input" id="confirmPassword" placeholder="Confirm password">
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block btn-lg" id="loginBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+              Sign In
+            </button>
+          </div>
+        </form>
+
+        <div style="text-align:center;margin-top:1.5rem;">
+          <p style="font-size:var(--text-xs);color:var(--text-muted);">
+            GravitPanel v1.0.0 &middot; Secure Connection
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Generate particles
+    const particlesEl = document.getElementById('particles');
+    for (let i = 0; i < 30; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.top = Math.random() * 100 + '%';
+      p.style.animationDelay = Math.random() * 6 + 's';
+      p.style.animationDuration = (4 + Math.random() * 6) + 's';
+      p.style.width = p.style.height = (2 + Math.random() * 4) + 'px';
+      particlesEl.appendChild(p);
+    }
+
+    // Check if setup needed
+    async function checkSetup() {
+      try {
+        const res = await fetch('/api/auth/check');
+        const data = await res.json();
+        if (data.needsSetup) {
+          document.getElementById('setupNote').style.display = 'block';
+          document.getElementById('confirmGroup').style.display = 'block';
+          document.getElementById('loginBtn').innerHTML = `
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            Create Account
+          `;
+          window.isSetup = true;
+        }
+      } catch (e) {}
+    }
+
+    // Toggle password visibility
+    document.getElementById('togglePassword').addEventListener('click', function() {
+      const input = document.getElementById('password');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    });
+
+    // Handle login/setup
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const btn = document.getElementById('loginBtn');
+      const originalHtml = btn.innerHTML;
+
+      btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px;border-top-color:white;border-color:rgba(255,255,255,0.3);border-top-color:white;"></div>';
+      btn.disabled = true;
+
+      try {
+        if (window.isSetup) {
+          const confirm = document.getElementById('confirmPassword').value;
+          if (password !== confirm) {
+            showToast('Passwords do not match', 'error');
+            return;
+          }
+          const res = await fetch('/api/auth/setup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+          });
+          const data = await res.json();
+          if (res.ok) {
+            // Now login
+            const loginRes = await fetch('/api/auth/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ username, password })
+            });
+            const loginData = await loginRes.json();
+            if (loginRes.ok) {
+              localStorage.setItem('gp_token', loginData.token);
+              localStorage.setItem('gp_user', JSON.stringify(loginData.user));
+              window.location.href = '/';
+            }
+          } else {
+            showToast(data.error || 'Setup failed', 'error');
+          }
+        } else {
+          const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+          });
+          const data = await res.json();
+          if (res.ok) {
+            localStorage.setItem('gp_token', data.token);
+            localStorage.setItem('gp_user', JSON.stringify(data.user));
+            window.location.href = '/';
+          } else {
+            showToast(data.error || 'Invalid credentials', 'error');
+          }
+        }
+      } catch (err) {
+        showToast('Connection error. Please try again.', 'error');
+      } finally {
+        btn.innerHTML = originalHtml;
+        btn.disabled = false;
+      }
+    });
+
+    // Toast notification
+    function showToast(message, type = 'info') {
+      let container = document.getElementById('toastContainer');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'toastContainer';
+        container.style.cssText = 'position:fixed;top:1rem;right:1rem;z-index:2000;display:flex;flex-direction:column;gap:0.5rem;';
+        document.body.appendChild(container);
+      }
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `
+        <span class="toast-message">${message}</span>
+        <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 4000);
+    }
+
+    checkSetup();
+
+    // Focus password field on Enter
+    document.getElementById('username').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') document.getElementById('password').focus();
+    });
+  </script>
+</body>
+</html>
